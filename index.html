@@ -644,7 +644,10 @@
       const mapLength = 15000;
 
       // loop
-      let then = timestamp();
+      let then = performance.now();
+      let accumulator = 0;
+      const fixedTimeStep = 1000 / 60; // Target 60 FPS
+
       const targetFrameRate = 1000 / 25; // in ms
 
       let audio;
@@ -1004,12 +1007,16 @@
         (function loop() {
           requestAnimationFrame(loop);
 
-          let now = timestamp();
+          let now = performance.now();
           let delta = now - then;
+          then = now;
 
-          if (delta > targetFrameRate) {
-            then = now - (delta % targetFrameRate);
-            update(delta / 1000);
+          accumulator += delta;
+
+          // Update game logic in fixed steps
+          while (accumulator >= fixedTimeStep) {
+            update(fixedTimeStep / 1000); // Pass fixed time step in seconds
+            accumulator -= fixedTimeStep;
           }
         })();
       }
