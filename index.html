@@ -298,10 +298,10 @@
         element.style.top = y2 + "px";
         element.style.left = x1 - w1 / 2 - w1 + "px";
         element.style.width = w1 * 3 + "px";
-        element.style.height = y1 - y2 + "px";
-
+        element.style.height = y1 - y2 + 0.5 + "px";
+        //element.dataset.layer = layer;
         let leftOffset = w1 + x2 - x1 + Math.abs(w2 / 2 - w1 / 2);
-        element.style.clipPath = `polygon(${leftOffset}px 0, ${leftOffset + w2}px 0, 66.66% 100%, 33.33% 100%)`;
+        element.style.clipPath = `polygon(${leftOffset}px 0, ${leftOffset + w2}px 0, 66.66666% 100%, 33.33333% 100%)`;
       }
 
       const KEYS = {};
@@ -635,8 +635,7 @@
           l.project(
             playerX * CONFIG.ROAD_WIDTH - x,
             camH,
-            startPos * CONFIG.SEGMENT_LENGTH -
-              (n >= CONFIG.NUM_SEGMENTS ? CONFIG.NUM_SEGMENTS * CONFIG.SEGMENT_LENGTH : 0)
+            startPos * CONFIG.SEGMENT_LENGTH - (n >= CONFIG.NUM_SEGMENTS ? CONFIG.NUM_SEGMENTS * CONFIG.SEGMENT_LENGTH : 0)
           );
           x += dx;
           dx += l.curve;
@@ -648,27 +647,22 @@
 
           if (l.special) l.drawSprite(level, 0, l.special, l.special.offset || 0);
 
-          for (let car of cars)
-            if ((car.pos | 0) === n % CONFIG.NUM_SEGMENTS) l.drawSprite(level, car.element, car.type, car.lane);
+          for (let car of cars) if ((car.pos | 0) === n % CONFIG.NUM_SEGMENTS) l.drawSprite(level, car.element, car.type, car.lane);
 
           if (l.Y >= maxy) continue;
           maxy = l.Y;
 
           let even = ((n / 2) | 0) % 2;
-          let grass = ASSETS.COLOR.GRASS[even * 1];
-          let rumble = ASSETS.COLOR.RUMBLE[even * 1];
-          let tar = ASSETS.COLOR.TAR[even * 1];
-
           let p = lines[(n - 1) % CONFIG.NUM_SEGMENTS];
 
-          drawQuad(l.elements[0], level, grass, width / 4, p.Y, halfWidth + 2, width / 4, l.Y, halfWidth);
-          drawQuad(l.elements[1], level, grass, (width / 4) * 3, p.Y, halfWidth + 2, (width / 4) * 3, l.Y, halfWidth);
-          drawQuad(l.elements[2], level, rumble, p.X, p.Y, p.W * 1.15, l.X, l.Y, l.W * 1.15);
-          drawQuad(l.elements[3], level, tar, p.X, p.Y, p.W, l.X, l.Y, l.W);
+          drawQuad(l.elements[0], level, ASSETS.COLOR.GRASS[even * 1], width / 4, p.Y, halfWidth + 2, width / 4, l.Y, halfWidth);
+          drawQuad(l.elements[1], level, ASSETS.COLOR.GRASS[even * 1], (width / 4) * 3, p.Y, halfWidth + 2, (width / 4) * 3, l.Y, halfWidth);
+          drawQuad(l.elements[2], level, ASSETS.COLOR.RUMBLE[even * 1], p.X, p.Y, p.W * 1.15, l.X, l.Y, l.W * 1.15);
+          drawQuad(l.elements[3], level, ASSETS.COLOR.TAR[even * 1], p.X, p.Y, p.W, l.X, l.Y, l.W);
 
           if (!even) {
             drawQuad(l.elements[4], level, ASSETS.COLOR.RUMBLE[1], p.X, p.Y, p.W * 0.4, l.X, l.Y, l.W * 0.4);
-            drawQuad(l.elements[5], level, tar, p.X, p.Y, p.W * 0.35, l.X, l.Y, l.W * 0.35);
+            drawQuad(l.elements[5], level, ASSETS.COLOR.TAR[even * 1], p.X, p.Y, p.W * 0.35, l.X, l.Y, l.W * 0.35);
           }
         }
       }
