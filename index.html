@@ -220,6 +220,7 @@
     <div id="controls">
       <span><span>C</span>insert coin</span>
       <span><span>M</span>mute</span>
+      <span><span>P</span>pause/resume</span>
       <span><span>&lt;</span><span>&gt;</span>move</span>
       <span><span>&lt;</span><span>&gt;</span>accelerate</span>
     </div>
@@ -431,6 +432,7 @@
       let inGame, start, playerX, speed, scoreVal, pos, cloudOffset, sectionProg, mapIndex, countDown;
       let lines = [];
       let cars = [];
+      let paused = false;
 
       function getFun(val) {
         return () => val;
@@ -516,6 +518,18 @@
           return;
         }
 
+        if (e.code === "KeyP") {
+          e.preventDefault();
+          paused = !paused; // Toggle paused state
+          if (paused) {
+            text.innerText = "PAUSED";
+            text.style.display = "block";
+          } else {
+            text.style.display = "none";
+          }
+          return;
+        }
+
         if (e.code === "Escape") {
           e.preventDefault();
           reset();
@@ -523,6 +537,7 @@
       });
 
       function update(step) {
+        if (paused) return;
         pos += speed;
         while (pos >= CONFIG.NUM_SEGMENTS * CONFIG.SEGMENT_LENGTH) pos -= CONFIG.NUM_SEGMENTS * CONFIG.SEGMENT_LENGTH;
         while (pos < 0) pos += CONFIG.NUM_SEGMENTS * CONFIG.SEGMENT_LENGTH;
