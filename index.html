@@ -225,25 +225,25 @@
     </div>
     <script>
       const CONFIG = {
-        INITIAL_SPEED: 0,
-        ACCELERATION: 38,
-        BREAKING: -80,
-        DECELERATION: -40,
-        MAX_OFF_SPEED: 40,
-        OFF_DECELERATION: -70,
-        ENEMY_SPEED: 8,
-        HIT_SPEED: 20,
-        MAP_LENGTH: 15000,
-        CAR_LANES: { A: -2.3, B: -0.5, C: 1.2 },
-        MAX_SPEED: 200,
-        ROAD_WIDTH: 4000,
-        SEGMENT_LENGTH: 200,
-        CAMERA_DEPTH: 0.2,
-        CAMERA_HEIGHT: 1500,
-        NUM_SEGMENTS: 70,
-        FIXED_TIME_STEP: 1000 / 60,
-        TARGET_FRAME_RATE: 1000 / 25,
-        CAR_POSITIONS: [0, 10, 20, 35, 50, 60, 70],
+        INITIAL_SPEED: 0, // سرعت اولیه بازی
+        ACCELERATION: 20, // شتاب بازی
+        BREAKING: -80, // مقدار ترمز بازی
+        DECELERATION: -40, // مقدار کاهش سرعت بازی
+        MAX_OFF_SPEED: 40, // حداکثر سرعت خارج از مسیر
+        OFF_DECELERATION: -70, // مقدار کاهش سرعت خارج از مسیر
+        ENEMY_SPEED: 5, // سرعت حرکت دشمنان
+        HIT_SPEED: 20, // سرعت برخورد
+        MAP_LENGTH: 150000, // طول نقشه
+        CAR_LANES: { A: -2.3, B: -0.5, C: 1.2 }, // مسیرهای مختلف برای حرکت ماشین‌ها
+        MAX_SPEED: 200, // حداکثر سرعت بازی
+        ROAD_WIDTH: 4000, // عرض جاده
+        SEGMENT_LENGTH: 200, // طول هر بخش از جاده
+        CAMERA_DEPTH: 0.2, // عمق دوربین
+        CAMERA_HEIGHT: 1500, // ارتفاع دوربین
+        NUM_SEGMENTS: 150, // تعداد بخش‌های جاده
+        FIXED_TIME_STEP: 1000 / 60, // مدت زمان ثابت برای هر فریم
+        TARGET_FRAME_RATE: 1000 / 25, // نرخ فریم هدف
+        CAR_POSITIONS: [0, 25], // موقعیت‌های اولیه ماشین‌ها
       };
 
       const ASSETS = {
