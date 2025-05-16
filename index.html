@@ -4,7 +4,10 @@
     <meta charset="UTF-8" />
     <title>Vocab Voyager</title>
     <link rel="icon" href="icon.png" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Press+Start+2P" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Press+Start+2P"
+    />
     <style>
       body {
         background: #222;
@@ -236,7 +239,7 @@
         HIT_SPEED: 20, // سرعت برخورد
         MAP_LENGTH: 150000, // طول نقشه
         CAR_LANES: { A: -2.3, B: -0.5, C: 1.2 }, // مسیرهای مختلف برای حرکت ماشین‌ها
-        MAX_SPEED: 200, // حداکثر سرعت بازی
+        MAX_SPEED: 120, // حداکثر سرعت بازی
         ROAD_WIDTH: 4000, // عرض جاده
         SEGMENT_LENGTH: 200, // طول هر بخش از جاده
         CAMERA_DEPTH: 0.2, // عمق دوربین
@@ -257,12 +260,19 @@
           TREE: { src: "images/tree.png", width: 132, height: 192 },
           HERO: { src: "images/hero.png", width: 110, height: 56 },
           CAR: { src: "images/car04.png", width: 50, height: 36 },
-          FINISH: { src: "images/finish.png", width: 339, height: 180, offset: -0.5 },
+          FINISH: {
+            src: "images/finish.png",
+            width: 339,
+            height: 180,
+            offset: -0.5,
+          },
           SKY: { src: "images/cloud.jpg" },
         },
         AUDIO: {
-          theme: "https://s3-us-west-2.amazonaws.com/s.cdpn.io/155629/theme.mp3",
-          engine: "https://s3-us-west-2.amazonaws.com/s.cdpn.io/155629/engine.wav",
+          theme:
+            "https://s3-us-west-2.amazonaws.com/s.cdpn.io/155629/theme.mp3",
+          engine:
+            "https://s3-us-west-2.amazonaws.com/s.cdpn.io/155629/engine.wav",
           honk: "https://s3-us-west-2.amazonaws.com/s.cdpn.io/155629/honk.wav",
           beep: "https://s3-us-west-2.amazonaws.com/s.cdpn.io/155629/beep.wav",
         },
@@ -271,7 +281,10 @@
       Number.prototype.pad = function (numZeros, char = 0) {
         let n = Math.abs(this);
         let zeros = Math.max(0, numZeros - Math.floor(n).toString().length);
-        let zeroString = Math.pow(10, zeros).toString().substr(1).replace(0, char);
+        let zeroString = Math.pow(10, zeros)
+          .toString()
+          .substr(1)
+          .replace(0, char);
         return zeroString + n;
       };
 
@@ -301,7 +314,9 @@
         element.style.height = y1 - y2 + 0.5 + "px";
         //element.dataset.layer = layer;
         let leftOffset = w1 + x2 - x1 + Math.abs(w2 / 2 - w1 / 2);
-        element.style.clipPath = `polygon(${leftOffset}px 0, ${leftOffset + w2}px 0, 66.66666% 100%, 33.33333% 100%)`;
+        element.style.clipPath = `polygon(${leftOffset}px 0, ${
+          leftOffset + w2
+        }px 0, 66.66666% 100%, 33.33333% 100%)`;
       }
 
       const KEYS = {};
@@ -429,7 +444,16 @@
       let then = performance.now();
       let accumulator = 0;
       let audio;
-      let inGame, start, playerX, speed, scoreVal, pos, cloudOffset, sectionProg, mapIndex, countDown;
+      let inGame,
+        start,
+        playerX,
+        speed,
+        scoreVal,
+        pos,
+        cloudOffset,
+        sectionProg,
+        mapIndex,
+        countDown;
       let lines = [];
       let cars = [];
       let paused = false;
@@ -539,7 +563,8 @@
       function update(step) {
         if (paused) return;
         pos += speed;
-        while (pos >= CONFIG.NUM_SEGMENTS * CONFIG.SEGMENT_LENGTH) pos -= CONFIG.NUM_SEGMENTS * CONFIG.SEGMENT_LENGTH;
+        while (pos >= CONFIG.NUM_SEGMENTS * CONFIG.SEGMENT_LENGTH)
+          pos -= CONFIG.NUM_SEGMENTS * CONFIG.SEGMENT_LENGTH;
         while (pos < 0) pos += CONFIG.NUM_SEGMENTS * CONFIG.SEGMENT_LENGTH;
 
         let startPos = (pos / CONFIG.SEGMENT_LENGTH) | 0;
@@ -560,8 +585,10 @@
 
         playerX = playerX.clamp(-3, 3);
 
-        if (inGame && KEYS.ArrowUp) speed = accelerate(speed, CONFIG.ACCELERATION, step);
-        else if (KEYS.ArrowDown) speed = accelerate(speed, CONFIG.BREAKING, step);
+        if (inGame && KEYS.ArrowUp)
+          speed = accelerate(speed, CONFIG.ACCELERATION, step);
+        else if (KEYS.ArrowDown)
+          speed = accelerate(speed, CONFIG.BREAKING, step);
         else speed = accelerate(speed, CONFIG.DECELERATION, step);
 
         if (Math.abs(playerX) > 0.55 && speed >= CONFIG.MAX_OFF_SPEED) {
@@ -600,12 +627,16 @@
           score.innerText = (scoreVal | 0).pad(8);
           tacho.innerText = speed | 0;
           let cT = new Date(timestamp() - start);
-          lap.innerText = `${cT.getMinutes()}'${cT.getSeconds().pad(2)}"${cT.getMilliseconds().pad(3)}`;
+          lap.innerText = `${cT.getMinutes()}'${cT.getSeconds().pad(2)}"${cT
+            .getMilliseconds()
+            .pad(3)}`;
         }
 
         if (speed > 0) audio.play("engine", speed * 4);
 
-        cloud.style.backgroundPosition = `${(cloudOffset -= lines[startPos].curve * step * speed * 0.13) | 0}px 0`;
+        cloud.style.backgroundPosition = `${
+          (cloudOffset -= lines[startPos].curve * step * speed * 0.13) | 0
+        }px 0`;
 
         for (let car of cars) {
           car.pos = (car.pos + CONFIG.ENEMY_SPEED * step) % CONFIG.NUM_SEGMENTS;
@@ -617,7 +648,15 @@
           }
 
           const offsetRatio = 5;
-          if ((car.pos | 0) === startPos && isCollide(playerX * offsetRatio + CONFIG.CAR_LANES.B, 0.5, car.lane, 0.5)) {
+          if (
+            (car.pos | 0) === startPos &&
+            isCollide(
+              playerX * offsetRatio + CONFIG.CAR_LANES.B,
+              0.5,
+              car.lane,
+              0.5
+            )
+          ) {
             speed = Math.min(CONFIG.HIT_SPEED, speed);
             if (inGame) audio.play("honk");
           }
@@ -635,7 +674,10 @@
           l.project(
             playerX * CONFIG.ROAD_WIDTH - x,
             camH,
-            startPos * CONFIG.SEGMENT_LENGTH - (n >= CONFIG.NUM_SEGMENTS ? CONFIG.NUM_SEGMENTS * CONFIG.SEGMENT_LENGTH : 0)
+            startPos * CONFIG.SEGMENT_LENGTH -
+              (n >= CONFIG.NUM_SEGMENTS
+                ? CONFIG.NUM_SEGMENTS * CONFIG.SEGMENT_LENGTH
+                : 0)
           );
           x += dx;
           dx += l.curve;
@@ -643,11 +685,15 @@
           l.clearSprites();
 
           if (n % 10 === 0) l.drawSprite(level, 0, ASSETS.IMAGE.TREE, -2);
-          if ((n + 5) % 10 === 0) l.drawSprite(level, 0, ASSETS.IMAGE.TREE, 1.3);
+          if ((n + 5) % 10 === 0)
+            l.drawSprite(level, 0, ASSETS.IMAGE.TREE, 1.3);
 
-          if (l.special) l.drawSprite(level, 0, l.special, l.special.offset || 0);
+          if (l.special)
+            l.drawSprite(level, 0, l.special, l.special.offset || 0);
 
-          for (let car of cars) if ((car.pos | 0) === n % CONFIG.NUM_SEGMENTS) l.drawSprite(level, car.element, car.type, car.lane);
+          for (let car of cars)
+            if ((car.pos | 0) === n % CONFIG.NUM_SEGMENTS)
+              l.drawSprite(level, car.element, car.type, car.lane);
 
           if (l.Y >= maxy) continue;
           maxy = l.Y;
@@ -655,14 +701,74 @@
           let even = ((n / 2) | 0) % 2;
           let p = lines[(n - 1) % CONFIG.NUM_SEGMENTS];
 
-          drawQuad(l.elements[0], level, ASSETS.COLOR.GRASS[even * 1], width / 4, p.Y, halfWidth + 2, width / 4, l.Y, halfWidth);
-          drawQuad(l.elements[1], level, ASSETS.COLOR.GRASS[even * 1], (width / 4) * 3, p.Y, halfWidth + 2, (width / 4) * 3, l.Y, halfWidth);
-          drawQuad(l.elements[2], level, ASSETS.COLOR.RUMBLE[even * 1], p.X, p.Y, p.W * 1.15, l.X, l.Y, l.W * 1.15);
-          drawQuad(l.elements[3], level, ASSETS.COLOR.TAR[even * 1], p.X, p.Y, p.W, l.X, l.Y, l.W);
+          drawQuad(
+            l.elements[0],
+            level,
+            ASSETS.COLOR.GRASS[even * 1],
+            width / 4,
+            p.Y,
+            halfWidth + 2,
+            width / 4,
+            l.Y,
+            halfWidth
+          );
+          drawQuad(
+            l.elements[1],
+            level,
+            ASSETS.COLOR.GRASS[even * 1],
+            (width / 4) * 3,
+            p.Y,
+            halfWidth + 2,
+            (width / 4) * 3,
+            l.Y,
+            halfWidth
+          );
+          drawQuad(
+            l.elements[2],
+            level,
+            ASSETS.COLOR.RUMBLE[even * 1],
+            p.X,
+            p.Y,
+            p.W * 1.15,
+            l.X,
+            l.Y,
+            l.W * 1.15
+          );
+          drawQuad(
+            l.elements[3],
+            level,
+            ASSETS.COLOR.TAR[even * 1],
+            p.X,
+            p.Y,
+            p.W,
+            l.X,
+            l.Y,
+            l.W
+          );
 
           if (!even) {
-            drawQuad(l.elements[4], level, ASSETS.COLOR.RUMBLE[1], p.X, p.Y, p.W * 0.4, l.X, l.Y, l.W * 0.4);
-            drawQuad(l.elements[5], level, ASSETS.COLOR.TAR[even * 1], p.X, p.Y, p.W * 0.35, l.X, l.Y, l.W * 0.35);
+            drawQuad(
+              l.elements[4],
+              level,
+              ASSETS.COLOR.RUMBLE[1],
+              p.X,
+              p.Y,
+              p.W * 0.4,
+              l.X,
+              l.Y,
+              l.W * 0.4
+            );
+            drawQuad(
+              l.elements[5],
+              level,
+              ASSETS.COLOR.TAR[even * 1],
+              p.X,
+              p.Y,
+              p.W * 0.35,
+              l.X,
+              l.Y,
+              l.W * 0.35
+            );
           }
         }
       }
@@ -692,7 +798,9 @@
       function updateHighscore() {
         let hN = Math.min(12, highscores.length);
         for (let i = 0; i < hN; i++) {
-          highscore.children[i].innerHTML = `${(i + 1).pad(2, "&nbsp;")}. ${highscores[i]}`;
+          highscore.children[i].innerHTML = `${(i + 1).pad(2, "&nbsp;")}. ${
+            highscores[i]
+          }`;
         }
       }
 
@@ -706,7 +814,9 @@
         hero.style.height = `${ASSETS.IMAGE.HERO.height}px`;
         cloud.style.backgroundImage = `url(${ASSETS.IMAGE.SKY.src})`;
         audio = new Audio();
-        Object.keys(ASSETS.AUDIO).forEach((key) => audio.load(ASSETS.AUDIO[key], key, () => {}));
+        Object.keys(ASSETS.AUDIO).forEach((key) =>
+          audio.load(ASSETS.AUDIO[key], key, () => {})
+        );
 
         for (let pos of CONFIG.CAR_POSITIONS) {
           cars.push(new Car(pos, ASSETS.IMAGE.CAR, CONFIG.CAR_LANES.C));
